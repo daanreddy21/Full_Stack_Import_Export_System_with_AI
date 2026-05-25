@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import Dashboard from "./pages/Dashboard";
 import Documents from "./pages/Documents";
 import HSN from "./pages/HSN";
 import Duty from "./pages/Duty";
 import Risk from "./pages/Risk";
 import Shipments from "./pages/Shipments";  
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/protectedRoute";
 import Notifications from "./pages/Notifications";
 import CountryAnalytics from "./pages/CountryAnalytics";
 import ManagerDashboard from "./pages/ManagerDashboard";
