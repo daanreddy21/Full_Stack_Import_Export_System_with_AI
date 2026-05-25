@@ -65,7 +65,6 @@ def approve_compliance(id: int):
     db: Session = SessionLocal()
 
     try:
-
         record = db.query(
             DutyCalculation
         ).filter(
@@ -189,8 +188,7 @@ def calculate_duty(data: dict):
             CustomsTaxRule.destination_country
             == destination_country,
 
-            CustomsTaxRule.hsn_code
-            == hsn_code
+            CustomsTaxRule.hsn_code.like(f"{hsn_code[:6]}%")
 
         ).first()
 

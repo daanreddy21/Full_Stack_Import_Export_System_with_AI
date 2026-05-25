@@ -14,7 +14,6 @@ setOriginCountry]
 = useState(
     payment.origin_country || ""
 );
-
 const [destinationCountry,
 setDestinationCountry]
 = useState(
@@ -24,7 +23,6 @@ setDestinationCountry]
     const [estimatedDelivery, setEstimatedDelivery] = useState("");
     const [remarks, setRemarks] = useState("");
 const countryPorts = {
-
     "India": [
         "Mumbai Port",
         "Chennai Port",
@@ -39,78 +37,64 @@ const countryPorts = {
         "Houston Port",
         "Miami Port"
     ],
-
     "China": [
         "Shanghai Port",
         "Shenzhen Port",
         "Guangzhou Port",
         "Ningbo Port"
     ],
-
     "UAE": [
         "Jebel Ali Port",
         "Dubai Port",
         "Abu Dhabi Port"
     ],
-
     "Germany": [
         "Hamburg Port",
         "Bremerhaven Port",
         "Wilhelmshaven Port"
     ],
-
     "Singapore": [
         "Singapore Port"
     ],
-
     "Japan": [
         "Tokyo Port",
         "Osaka Port",
         "Yokohama Port"
     ],
-
     "Australia": [
         "Sydney Port",
         "Melbourne Port",
         "Brisbane Port"
     ],
-
     "South Korea": [
         "Busan Port",
         "Incheon Port"
     ],
-
     "Canada": [
         "Vancouver Port",
         "Montreal Port"
     ],
-
     "Brazil": [
         "Santos Port",
         "Rio de Janeiro Port"
     ],
-
     "United Kingdom": [
         "Port of London",
         "Port of Liverpool"
     ],
-
     "France": [
         "Le Havre Port",
         "Marseille Port"
     ],
-
     "Netherlands": [
         "Rotterdam Port",
         "Amsterdam Port"
     ],
-
     "Saudi Arabia": [
         "Jeddah Islamic Port",
         "King Abdulaziz Port"
     ]
 };
-
     const [analysis, setAnalysis] = useState(null);
     const [loading, setLoading] = useState(false);
     const handleAnalyzeShipment = async () => {
@@ -241,56 +225,41 @@ localStorage.setItem(
                             <input placeholder="Container Number"value={containerNumber}onChange={(e) =>setContainerNumber(e.target.value)}
                                 className="w-full border border-gray-200 bg-white p-4 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-black"/>
 <input
-
 value={originCountry}
-
 disabled
-
 className="w-full border border-gray-200 bg-gray-100 p-4 rounded-2xl shadow-sm"
 />
 <select
-
 value={originPort}
-
 onChange={(e) =>
 setOriginPort(
     e.target.value
 )
 }
-
 className="w-full border border-gray-200 bg-white p-4 rounded-2xl shadow-sm"
 >
-
 <option value="">
 Select Origin Port
 </option>
-
 {
 countryPorts[
 originCountry
 ]?.map((port, index) => (
-
 <option
 key={index}
 value={port}
 >
 {port}
 </option>
-
 ))
 }
-
 <option value="Manual">
 Other / Manual Entry
 </option>
-
 </select>
 <input
-
 value={destinationCountry}
-
 disabled
-
 className="w-full border border-gray-200 bg-gray-100 p-4 rounded-2xl shadow-sm"
 />
 <select
