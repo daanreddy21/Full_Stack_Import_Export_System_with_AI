@@ -59,7 +59,7 @@ def upload_compliance_document(
         }
     finally:
         db.close()
-@router.put("/approve-compliance/{id}")
+@router.put("/api/approve-compliance/{id}")
 def approve_compliance(id: int):
 
     db: Session = SessionLocal()
@@ -381,7 +381,7 @@ def calculate_duty(data: dict):
     finally:
 
         db.close()
-@router.get("/duty-history")
+@router.get("/api/duty-history")
 def get_duty_history():
     db: Session = SessionLocal()
     try:
