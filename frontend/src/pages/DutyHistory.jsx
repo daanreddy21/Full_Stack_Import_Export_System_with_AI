@@ -66,9 +66,7 @@ export default function DutyHistory() {
     ]);
     const fetchHistory = async () => {
         try {
-            const response = await API.get(
-                "/duty-history"
-            );
+            const response = await API.get("/api/duty-history");
 const approvedOnly = response.data.filter(
     (item) =>
         item.compliance_status === "APPROVED"
@@ -82,7 +80,7 @@ setFilteredHistory(approvedOnly);
     const fetchPayments = async () => {
         try {
             const response = await API.get(
-                "/payments"
+                "/api/payments"
             );
             setPayments(response.data);
         } catch (error) {

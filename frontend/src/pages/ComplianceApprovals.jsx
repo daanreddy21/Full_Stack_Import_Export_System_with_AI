@@ -50,9 +50,7 @@ export default function ComplianceApprovals() {
 
         try {
 
-await API.put(
- `/approve-compliance/${id}`
-);
+    API.put(`/api/approve-compliance/${id}`);
 
             fetchHistory();
 
@@ -428,8 +426,6 @@ await API.put(
         </div>
 
         </div>
-
-        {/* APPROVED SECTION */}
 
         <div className="bg-white rounded-2xl shadow p-6">
 
