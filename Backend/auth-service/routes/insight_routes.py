@@ -4,7 +4,7 @@ from database.db import SessionLocal
 from models.ai_insight_model import AIInsight
 from utils.ai_insight_engine import (generate_ai_insights)
 router = APIRouter()
-@router.post("/generate-ai-insights")
+@router.post("/api/generate-ai-insights")
 def create_ai_insights():
     db: Session = SessionLocal()
     db.query(
@@ -23,7 +23,7 @@ def create_ai_insights():
     return { 
         "message": "Insights Generated Successfully"
     }
-@router.get("/ai-insights")
+@router.get("/api/ai-insights")
 def get_ai_insights():
     db: Session = SessionLocal()
     insights = db.query(

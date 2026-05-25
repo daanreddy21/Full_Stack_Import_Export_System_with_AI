@@ -5,7 +5,7 @@ export default function PaymentForm({result, documentData, onClose, onSaved}) {
     const [dueDate, setDueDate] =useState("");
     const handleSavePayment = async () => {
         try {
-            await API.post("/payments",{
+            await API.post("/api/payments",{
                 invoice_number:documentData.invoice_number,
                 buyer_name:documentData.buyer_name,
                 hsn_code:result.hsn_code,

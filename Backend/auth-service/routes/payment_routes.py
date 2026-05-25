@@ -7,9 +7,7 @@ from models.payment_model import Payment
 from datetime import (datetime, date)
 from models.notification_model import Notification
 router = APIRouter()
-@router.get("/payments")
-
-@router.get("/payments")
+@router.get("/api/payments")
 def get_payments():
     db: Session = SessionLocal()
     payments = db.query(
@@ -102,7 +100,7 @@ def create_payment(data: dict):
     return {
         "message": "Payment Created"
     }
-@router.put("/payments/pay/{payment_id}")
+@router.put("/api/payments/pay/{payment_id}")
 def mark_payment_paid( payment_id: int ):
     db: Session = SessionLocal()
     payment = db.query(Payment).filter(Payment.id == payment_id).first()

@@ -10,7 +10,7 @@ export default function ShipmentApprovals() {
     const fetchShipments = async () => {
         try {
             const response = await API.get(
-                "/shipments"
+                "/api/shipments"
             );
             setShipments(response.data);
         } catch (error) {
@@ -24,7 +24,7 @@ export default function ShipmentApprovals() {
                 localStorage.getItem("user")
             );
             await API.put(
-                `/approve-shipment/${id}`,
+                `/api/approve-shipment/${id}`,
                 {
                     manager_name: user?.name
                 }
@@ -44,7 +44,7 @@ export default function ShipmentApprovals() {
         try {
             setLoading(true);
             await API.put(
-                `/hold-shipment/${id}`,
+                `/api/hold-shipment/${id}`,
                 {
                     reason
                 }

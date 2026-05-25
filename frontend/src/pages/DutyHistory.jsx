@@ -66,11 +66,14 @@ export default function DutyHistory() {
     ]);
     const fetchHistory = async () => {
         try {
-            const response = await API.get("/api/duty-history");
+            const response = await API.get(
+                "/api/duty-history"
+            );
 const approvedOnly = response.data.filter(
     (item) =>
         item.compliance_status === "APPROVED"
 );
+
 setHistory(approvedOnly);
 setFilteredHistory(approvedOnly);
         } catch (error) {
@@ -92,7 +95,7 @@ setFilteredHistory(approvedOnly);
     ) => {
         try {
             const response = await API.get(
-                `/document-by-hsn/${hsnCode}`
+                `/api/document-by-hsn/${hsnCode}`
             );
             setSelectedDocument(response.data);
         } catch (error) {
@@ -154,7 +157,7 @@ const handleUpload = async (
             file
         );
             await API.post(
-                `/upload-compliance-document/${id}`,
+                `/api/upload-compliance-document/${id}`,
                 formData,
             {
                 headers: {

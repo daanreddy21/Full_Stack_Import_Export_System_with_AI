@@ -75,7 +75,7 @@ setDestinationCountry]
 
             const response =
                 await API.get(
-                    "/hsn-codes"
+                    "/api/hsn-codes"
                 );
 
             setHsnCodes(
@@ -103,7 +103,7 @@ setDestinationCountry]
 
             const response =
                 await API.get(
-                    `/hsn-details/${selectedHSN}`
+                    `/api/hsn-details/${selectedHSN}`
                 );
 
             setProduct(
@@ -129,7 +129,7 @@ setDestinationCountry]
 
             const response =
 await API.post(
-    "/calculate-duty",
+    "/api/calculate-duty",
     {
 
         origin_country:
@@ -172,7 +172,7 @@ const handleSave =
     try {
 
         await API.post(
-            "/save-duty-calculation",
+            "/api/save-duty-calculation",
             {
 
                 ...result,

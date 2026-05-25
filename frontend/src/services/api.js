@@ -7,17 +7,17 @@ const API = axios.create({
 export default API;
 
 export const getDocumentStats = async () => {
-    const response = await API.get("/documents/stats");
+    const response = await API.get("/api/documents/stats");
     return response.data;
 };
 
 export const getDocuments = async () => {
-    const response = await API.get("/documents");
+    const response = await API.get("/api/documents");
     return response.data;
 };
 
 export const getDocumentById = async (id) => {
-    const response = await API.get(`/documents/${id}`);
+    const response = await API.get(`/api/documents/${id}`);
     return response.data;
 };
 
@@ -26,7 +26,7 @@ export const uploadDocument = async (file) => {
     formData.append("file", file);
 
     const response = await API.post(
-        "/documents/upload",
+        "/api/documents/upload",
         formData
     );
 

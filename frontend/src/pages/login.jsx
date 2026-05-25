@@ -17,7 +17,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/login", formData);
+      const res = await API.post("/api/login", formData);
       localStorage.setItem(
         "user",
         JSON.stringify(res.data.user)

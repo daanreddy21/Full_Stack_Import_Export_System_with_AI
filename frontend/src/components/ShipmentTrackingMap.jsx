@@ -130,7 +130,7 @@ const shipmentSteps = [
     ) => {
         try {
             await API.put(
-                `/update-shipment-status/${shipment.id}`,
+                `/api/update-shipment-status/${shipment.id}`,
                 {
                     shipment_status: status
                 }

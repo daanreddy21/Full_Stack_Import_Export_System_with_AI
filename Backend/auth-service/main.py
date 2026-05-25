@@ -21,18 +21,9 @@ from models.required_documents_model import *
 from models.restricted_products_model import *
 from models.trade_agreements_model import *
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
-app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
-from fastapi.middleware.cors import CORSMiddleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_credentials=True,allow_methods=["*"],allow_headers=["*"],)
 app.include_router(auth_router)
 app.include_router(document_router)
 app.include_router(duty_router)
@@ -46,23 +37,9 @@ app.include_router(insight_router)
 app.include_router(country_analytics_router)
 app.include_router(notification_router)
 app.mount("/uploads",StaticFiles(directory="uploads"),name="uploads")
-@app.get("/{full_path:path}")
-async def serve_react_app(full_path: str):
-    api_prefixes = [
-        "login",
-        "documents",
-        "payments",
-        "risk",
-        "shipments",
-        "dashboard-analytics",
-        "ai-insights",
-        "notifications",
-        "country-analytics",
-        "calculate-duty",
-        "uploads",
-        "duty-history",
-        "compliance"
-    ]
-    if any(full_path.startswith(prefix) for prefix in api_prefixes):
-        return {"detail": "API route not found"}
-    return FileResponse("static/index.html")
+@app.get("/")
+def home():
+    return {
+        "message": "Auth Service Running"
+    }
+

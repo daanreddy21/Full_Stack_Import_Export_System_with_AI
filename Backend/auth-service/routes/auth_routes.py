@@ -4,7 +4,7 @@ from database.db import SessionLocal
 from models.user_model import User
 from schemas.user_schema import LoginSchema
 router = APIRouter()
-@router.post("/login")
+@router.post("/api/login")
 def login(user: LoginSchema):
     db: Session = SessionLocal()
     try:

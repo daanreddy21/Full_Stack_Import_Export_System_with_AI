@@ -10,7 +10,7 @@ from utils.validation_engine import validate_invoice_data
 router = APIRouter()
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-@router.post("/documents/upload")
+@router.post("/api/documents/upload")
 async def upload_document(file: UploadFile = File(...)):
     file_path = f"{UPLOAD_FOLDER}/{file.filename}"
     with open(file_path, "wb") as buffer:
@@ -56,12 +56,12 @@ async def upload_document(file: UploadFile = File(...)):
         "validation_result": validation_result,
         "data": data
     }
-@router.get("/documents")
+@router.get("/api/documents")
 def get_documents():
     db: Session = SessionLocal()
     documents = db.query(Document).all()
     return documents
-@router.get("/documents/stats")
+@router.get("/api/documents/stats")
 def get_document_stats():
     db: Session = SessionLocal()
     total_documents = db.query(Document).count()
@@ -85,14 +85,14 @@ def get_document_stats():
         "ocr_success": ocr_percentage,
         "validation_passed": validation_percentage
     }
-@router.get("/documents/{document_id}")
+@router.get("/api/documents/{document_id}")
 def get_document(document_id):
     db: Session = SessionLocal()
     document = db.query(Document).filter(Document.id == document_id).first()
     if not document:
         return {"message": "Document Not Found"}
     return document
-@router.get("/document-by-hsn/{hsn_code}")
+@router.get("/api/document-by-hsn/{hsn_code}")
 def get_document_by_hsn(hsn_code: str):
     db: Session = SessionLocal()
     document = db.query(

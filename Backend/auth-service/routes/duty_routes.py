@@ -104,7 +104,7 @@ def approve_compliance(id: int):
     finally:
 
         db.close()
-@router.get("/hsn-codes")
+@router.get("/api/hsn-codes")
 def get_hsn_codes():
     db: Session = SessionLocal()
     try:
@@ -118,7 +118,7 @@ def get_hsn_codes():
         ]
     finally:
         db.close()
-@router.get("/hsn-details/{hsn_code}")
+@router.get("/api/hsn-details/{hsn_code}")
 def get_hsn_details(hsn_code: str):
     db: Session = SessionLocal()
     try:
@@ -135,7 +135,7 @@ def get_hsn_details(hsn_code: str):
         }
     finally:
         db.close()
-@router.post("/calculate-duty")
+@router.post("/api/calculate-duty")
 def calculate_duty(data: dict):
 
     db: Session = SessionLocal()
@@ -394,7 +394,7 @@ def get_duty_history():
     finally:
         db.close()
 
-@router.post("/save-duty-calculation")
+@router.post("/api/save-duty-calculation")
 def save_duty_calculation(data: dict):
 
     db: Session = SessionLocal()

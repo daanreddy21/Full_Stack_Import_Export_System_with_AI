@@ -8,7 +8,7 @@ from utils.ai_risk_engine import (
     generate_risk_analysis
 )
 router = APIRouter()
-@router.post("/generate-risk-analysis")
+@router.post("/api/generate-risk-analysis")
 def generate_risk_report():
     db: Session = SessionLocal()
     try:
@@ -113,7 +113,7 @@ def generate_risk_report():
         }
     finally:
         db.close()
-@router.get("/risk-analysis-history")
+@router.get("/api/risk-analysis-history")
 def get_risk_history():
     db: Session = SessionLocal()
     try:

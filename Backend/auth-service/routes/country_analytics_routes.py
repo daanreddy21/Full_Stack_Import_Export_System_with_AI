@@ -6,7 +6,7 @@ from models.payment_model import Payment
 from models.shipment_model import Shipment
 from models.risk_model import RiskAnalysis
 router = APIRouter()
-@router.get("/country-analytics")
+@router.get("/api/country-analytics")
 def get_country_analytics():
     db: Session = SessionLocal()
     try:

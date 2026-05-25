@@ -9,7 +9,7 @@ export default function CountryAnalytics() {
     const fetchAnalytics = async () => {
         try {
             const response = await API.get(
-                "/country-analytics"
+                "/api/country-analytics"
             );
             setData(response.data);
         } catch (error) {

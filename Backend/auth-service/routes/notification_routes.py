@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database.db import SessionLocal
 from models.notification_model import Notification
 router = APIRouter()
-@router.get("/notifications")
+@router.get("/api/notifications")
 def get_notifications():
     db: Session = SessionLocal()
     try:
@@ -15,7 +15,7 @@ def get_notifications():
         return notifications
     finally:
         db.close()
-@router.put("/mark-notification-read/{id}")
+@router.put("/api/mark-notification-read/{id}")
 def mark_notification_read(id: int):
     db: Session = SessionLocal()
     try:

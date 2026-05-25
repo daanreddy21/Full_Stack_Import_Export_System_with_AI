@@ -153,7 +153,7 @@ def find_software_context(user_message):
     return None
 
 
-@router.post("/chat")
+@router.post("/api/chat")
 def chat(data: dict):
 
     user_message = data.get(

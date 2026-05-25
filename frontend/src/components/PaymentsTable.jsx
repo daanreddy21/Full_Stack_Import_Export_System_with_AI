@@ -9,7 +9,7 @@ export default function PaymentsTable({
     const handlePay = async (id) => {
         try {
             await API.put(
-                `/payments/pay/${id}`
+                `/api/payments/pay/${id}`
             );
             const payment =
     payments.find(

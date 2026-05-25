@@ -34,7 +34,7 @@ export default function FloatingChatbot() {
         setLoading(true);
         try {
             const response = await API.post(
-                "/chat",
+                "/api/chat",
                 {
                     message
                 }

@@ -16,7 +16,7 @@ export default function ManagerDashboard() {
         try {
 
             const response = await API.get(
-                "/dashboard-analytics"
+                "/api/dashboard-analytics"
             );
 
             setAnalytics(response.data);
@@ -30,7 +30,7 @@ export default function ManagerDashboard() {
         try {
 
             const response = await API.get(
-                "/country-analytics"
+                "/api/country-analytics"
             );
 
             setCountryData(response.data);

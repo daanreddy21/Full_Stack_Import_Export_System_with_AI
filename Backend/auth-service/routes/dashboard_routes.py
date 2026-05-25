@@ -13,7 +13,7 @@ from models.duty_calculation_model import DutyCalculation
 router = APIRouter()
 
 
-@router.get("/dashboard-analytics")
+@router.get("/api/dashboard-analytics")
 def dashboard_analytics():
 
     db: Session = SessionLocal()

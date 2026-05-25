@@ -12,7 +12,7 @@ export default function Shipments() {
     const fetchShipments = async () => {
         try {
             const response = await API.get(
-                "/shipments"
+                "/api/shipments"
             );
             setShipments(response.data);
         } catch (error) {
@@ -22,7 +22,7 @@ export default function Shipments() {
 const markDelivered = async (id) => {
     try {
         await API.put(
-            `/deliver-shipment/${id}`
+            `/api/deliver-shipment/${id}`
         );
         fetchShipments();
     } catch (error) {

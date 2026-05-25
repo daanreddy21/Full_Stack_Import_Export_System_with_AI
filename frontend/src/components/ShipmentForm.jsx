@@ -111,7 +111,7 @@ const countryPorts = {
         }
         setLoading(true);
         try {
-            const response = await API.post("/analyze-shipment",{
+            const response = await API.post("/api/analyze-shipment",{
                 product: payment.product,
                 hsn_code: payment.hsn_code,
                 destination_country: payment.destination_country,                    destination_port: destinationPort,
@@ -153,7 +153,7 @@ const countryPorts = {
 }};
     const handleCreateShipment = async () => {
         try {
-            await API.post("/create-shipment",{
+            await API.post("/api/create-shipment",{
                 invoice_number: payment.invoice_number,
                 buyer_name: payment.buyer_name,
                 country: payment.destination_country,

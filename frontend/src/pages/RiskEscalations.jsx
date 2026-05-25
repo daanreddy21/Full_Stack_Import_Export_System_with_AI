@@ -9,7 +9,7 @@ export default function RiskEscalations() {
     const fetchNotifications = async () => {
         try {
             const response = await API.get(
-                "/notifications"
+                "/api/notifications"
             );
             setNotifications(
                 response.data
@@ -21,7 +21,7 @@ export default function RiskEscalations() {
     const markAsRead = async (id) => {
         try {
             await API.put(
-                `/mark-notification-read/${id}`
+                `/api/mark-notification-read/${id}`
             );
             fetchNotifications();
         } catch (error) {

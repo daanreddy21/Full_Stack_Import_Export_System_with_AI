@@ -20,7 +20,7 @@ const fetchStats = async () => {
 };
   const handleView = async (id) => {
     const res = await API.get(
-      `/documents/${id}`
+      ` /api/documents/${id}`
     );
     setSelectedDocument(res.data);
     setShowModal(true);
@@ -30,13 +30,13 @@ const fetchStats = async () => {
     const formData = new FormData();
     formData.append("file", file);
     await API.post(
-      "/documents/upload",
+      "/api/documents/upload",
       formData
     );
     fetchDocuments();
   };
   const fetchDocuments = async () => {
-    const res = await API.get("/documents");
+    const res = await API.get("/api/documents");
     setDocuments(res.data);
   };
   useEffect(() => {

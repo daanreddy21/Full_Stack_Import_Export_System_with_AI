@@ -13,7 +13,7 @@ export default function Risk() {
 const fetchRiskHistory = async () => {
     try {
         const response = await API.get(
-            "/risk-analysis-history"
+            "/api/risk-analysis-history"
         );
         setRiskData(response.data);
     } catch (error) {
@@ -24,7 +24,7 @@ const generateRiskAnalysis = async () => {
     try {
         setLoading(true);
         await API.post(
-            "/generate-risk-analysis"
+            "/api/generate-risk-analysis"
         );
         await fetchRiskHistory();
         alert(

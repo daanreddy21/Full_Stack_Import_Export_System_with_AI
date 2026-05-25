@@ -24,7 +24,7 @@ export default function ComplianceApprovals() {
 
         try {
 
-            const response = await API.get("/duty-history");
+            const response = await API.get("/api/duty-history");
 
             setHistory(
                 response.data
@@ -50,7 +50,9 @@ export default function ComplianceApprovals() {
 
         try {
 
-    API.put(`/api/approve-compliance/${id}`);
+await API.put(
+ `/api/approve-compliance/${id}`
+);
 
             fetchHistory();
 
@@ -426,6 +428,8 @@ export default function ComplianceApprovals() {
         </div>
 
         </div>
+
+        {/* APPROVED SECTION */}
 
         <div className="bg-white rounded-2xl shadow p-6">
 

@@ -12,7 +12,7 @@ export default function Dashboard() {
     const fetchDashboardAnalytics = async () => {
         try {
             const response = await API.get(
-                "/dashboard-analytics"
+                "/api/dashboard-analytics"
             );
             setAnalytics(response.data);
         } catch (error) {
@@ -22,7 +22,7 @@ export default function Dashboard() {
 const fetchAIInsights = async () => {
     try {
         const response = await API.get(
-            "/ai-insights"
+            "/api/ai-insights"
         );
         setInsights( response.data );
     } catch (error) {
@@ -33,7 +33,7 @@ const generateAIInsights = async () => {
     try {
         setLoadingInsights(true);
         await API.post(
-            "/generate-ai-insights"
+            "/api/generate-ai-insights"
         );
         await fetchAIInsights();
     } catch (error) {

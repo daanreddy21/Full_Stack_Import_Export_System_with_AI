@@ -8,17 +8,17 @@ import random
 from datetime import date
 from models.notification_model import Notification
 router = APIRouter()
-@router.get("/ports/{country}")
+@router.get("/api/ports/{country}")
 def get_ports(country: str):
     return {
         "ports":
         PORTS.get(country, [])
     }
-@router.post("/analyze-shipment")
+@router.post("/api/analyze-shipment")
 def analyze_shipment(data: dict):
     result = analyze_shipment_ai(data)
     return result
-@router.post("/create-shipment")
+@router.post("/api/create-shipment")
 def create_shipment(data: dict):
     db: Session = SessionLocal()
     try:
@@ -53,7 +53,7 @@ def create_shipment(data: dict):
         }
     finally:
         db.close()
-@router.get("/shipments")
+@router.get("/api/shipments")
 def get_shipments():
     db: Session = SessionLocal()
     try:
@@ -131,7 +131,7 @@ def get_shipments():
         return result
     finally:
         db.close()
-@router.put("/update-shipment-status/{shipment_id}")
+@router.put("/api/update-shipment-status/{shipment_id}")
 def update_shipment_status(
     shipment_id: int,
     data: dict
@@ -158,7 +158,7 @@ def update_shipment_status(
         }
     finally:
         db.close()
-@router.put("/deliver-shipment/{shipment_id}")
+@router.put("/api/deliver-shipment/{shipment_id}")
 def deliver_shipment(shipment_id: int):
     db: Session = SessionLocal()
     try:
@@ -183,7 +183,7 @@ def deliver_shipment(shipment_id: int):
         }
     finally:
         db.close()
-@router.put("/approve-shipment/{shipment_id}")
+@router.put("/api/approve-shipment/{shipment_id}")
 def approve_shipment(
     shipment_id: int,
     data: dict
@@ -207,7 +207,7 @@ def approve_shipment(
         return {"message":"Shipment Approved"}
     finally:
         db.close()
-@router.put("/hold-shipment/{shipment_id}")
+@router.put("/api/hold-shipment/{shipment_id}")
 def hold_shipment(shipment_id: int, data: dict):
     db: Session = SessionLocal()
     try:
