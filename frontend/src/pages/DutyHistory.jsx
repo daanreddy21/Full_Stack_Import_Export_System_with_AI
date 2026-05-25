@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -150,9 +151,9 @@ const handleUpload = async (
             "file",
             file
         );
-        await axios.post(
-            `http://127.0.0.1:8000/upload-compliance-document/${id}`,
-            formData,
+            await API.post(
+                `/upload-compliance-document/${id}`,
+                formData,
             {
                 headers: {
                     "Content-Type":
@@ -440,7 +441,7 @@ handleUpload(
 {
 item.uploaded_document && (
 <a
-href={`http://127.0.0.1:8000/${item.uploaded_document}`}
+href={`${import.meta.env.VITE_API_URL}/${item.uploaded_document}`}
 target="_blank"
 rel="noreferrer"
 className="bg-gray-700 text-white px-3 py-2 rounded-lg text-sm"
@@ -452,7 +453,7 @@ View Doc
 {
 item.uploaded_document && (
 <a
-href={`http://127.0.0.1:8000/${item.uploaded_document}`}
+href={`${import.meta.env.VITE_API_URL}/${item.uploaded_document}`}
 download
 className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm"
 >
