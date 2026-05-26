@@ -74,7 +74,7 @@ const generateRiskAnalysis = async () => {
         <div className="bg-yellow-100 p-6 rounded-2xl shadow">
             <h3 className="text-gray-600">  Total Pending </h3>
             <h1 className="text-5xl font-bold text-yellow-700 mt-3">
-        ₹ {totalPending}
+        USD {totalPending}
         </h1>
         </div>
         <div className="bg-blue-100 p-6 rounded-2xl shadow">

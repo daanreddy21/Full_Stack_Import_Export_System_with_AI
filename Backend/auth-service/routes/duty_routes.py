@@ -16,7 +16,7 @@ os.makedirs(
     exist_ok=True
 )
 @router.post(
-    "/upload-compliance-document/{id}"
+    "/api/upload-compliance-document/{id}"
 )
 def upload_compliance_document(
     id: int,

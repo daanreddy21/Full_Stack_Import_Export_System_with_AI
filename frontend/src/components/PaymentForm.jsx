@@ -72,8 +72,7 @@ setDestinationCountry(
     e.target.value
 )
 }
-className="border p-3 rounded-xl"
-/>
+className="border p-3 rounded-xl"/>
                 <input value={`USD ${result.final_total_usd}`}disabled className="border p-3 rounded-xl bg-gray-100"/>
             <input value={`${result.destination_currency} ${result.final_total_local}`}disabled className="border p-3 rounded-xl bg-gray-100"/>
                     <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="border p-3 rounded-xl" />

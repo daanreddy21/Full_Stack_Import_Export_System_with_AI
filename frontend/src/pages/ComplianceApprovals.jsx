@@ -395,19 +395,22 @@ await API.put(
 
         }
 
-        <button
-
-        onClick={() =>
-            handleApprove(item.id)
-        }
-
-        className="bg-purple-600 text-white px-3 py-2 rounded-lg text-sm"
-
-        >
-
-        Approve
-
-        </button>
+<button
+onClick={() =>
+    handleApprove(item.id)
+}
+disabled={!item.uploaded_document}
+className={`
+px-3 py-2 rounded-lg text-sm text-white
+${
+item.uploaded_document
+? "bg-purple-600"
+: "bg-gray-400 cursor-not-allowed"
+}
+`}
+>
+Approve
+</button>
 
         </div>
 

@@ -33,6 +33,7 @@ def generate_risk_report():
                     "pending_payments": 0,
                     "overdue_payments": 0,
                     "total_pending_amount": 0,
+                    "total_pending_usd": 0,
                     "risk_score": 0
                 }
             if payment.payment_status == "Pending":
@@ -41,10 +42,14 @@ def generate_risk_report():
                 ] += 1
                 buyer_map[buyer][
                     "total_pending_amount"
-                ] += float(payment.amount)
+                ] += float(payment.final_total_usd or 0)
                 buyer_map[buyer][
                     "risk_score"
                 ] += 10
+                buyer_map[buyer]["quantity"] += 1
+                buyer_map[buyer]["unit_price"] = (
+                    float(payment.final_total_usd or 0)
+                )
                 if payment.due_date:
                     overdue_days = (
                         today - payment.due_date
@@ -56,6 +61,7 @@ def generate_risk_report():
                         buyer_map[buyer][
                             "risk_score"
                         ] += overdue_days
+        db.query(RiskAnalysis).delete()
         result = []
         for buyer in buyer_map.values():
             ai_result = generate_risk_analysis(
@@ -103,7 +109,7 @@ def generate_risk_report():
                 "risk_reasons": ai_result["risk_reasons"],
                 "recommendation": ai_result["recommendation"]
             })
-        db.query(RiskAnalysis).delete()
+        
         db.commit()
         return {
             "message":

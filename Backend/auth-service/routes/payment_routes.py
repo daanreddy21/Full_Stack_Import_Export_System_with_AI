@@ -29,24 +29,17 @@ def get_payments():
             ).days
             if overdue_days > 0:
                 overdue = True
-                if overdue_days > 5:
-                    existing_notification = db.query(
-                        Notification
-                    ).filter(
-                        Notification.invoice_number == payment.invoice_number,
-                        Notification.type == "payment_risk",
-                        Notification.message.contains(str(overdue_days))
-                    ).first()
-                    if not existing_notification:
-                        notification = Notification(
-                            type="payment_risk",
-                            title="Payment Collection Risk",
-                            message= f"Payment overdue by {overdue_days} days. Inform finance department regarding overdue invoice payment.",
-                            invoice_number=payment.invoice_number,
-                            buyer_name=payment.buyer_name,
-                            department="Finance"
-                        )
-                        db.add(notification)
+                if overdue_days > 3:
+                    notification = Notification(
+                        type="payment_risk",
+                        title="Payment Collection Risk",
+                        message=f"Payment overdue by {overdue_days} days. Inform finance department regarding overdue invoice payment.",
+                        invoice_number=payment.invoice_number,
+                        buyer_name=payment.buyer_name,
+                        department="Finance"
+                    )
+
+                    db.add(notification)
         result.append({
             "id": payment.id,
             "invoice_number": payment.invoice_number,
@@ -67,7 +60,7 @@ def get_payments():
         })
     db.commit()
     return result
-@router.post("/payments")
+@router.post("/api/payments")
 def create_payment(data: dict):
     db: Session = SessionLocal()
     document = db.query(
