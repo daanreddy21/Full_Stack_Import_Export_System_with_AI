@@ -7,8 +7,6 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const user = JSON.parse( localStorage.getItem("user") );
     const [analytics, setAnalytics] = useState(null);
-    const [insights, setInsights] = useState([]);
-    const [loadingInsights, setLoadingInsights] = useState(false);
     const fetchDashboardAnalytics = async () => {
         try {
             const response = await API.get(
@@ -19,37 +17,11 @@ export default function Dashboard() {
             console.log(error);
         }
     };
-const fetchAIInsights = async () => {
-    try {
-        const response = await API.get(
-            "/api/ai-insights"
-        );
-        setInsights( response.data );
-    } catch (error) {
-        console.log(error);
-    }
-};
-const generateAIInsights = async () => {
-    try {
-        setLoadingInsights(true);
-        await API.post(
-            "/api/generate-ai-insights"
-        );
-        await fetchAIInsights();
-    } catch (error) {
-        console.log(error);
-    } finally {
-        setLoadingInsights(false);
-    }
-};
-    useEffect(() => {
-        fetchDashboardAnalytics();
-        fetchAIInsights();
-        const interval = setInterval(() => {
-            fetchDashboardAnalytics();
-        }, 30000);
-        return () => clearInterval(interval);
-    }, []);
+useEffect(() => {
+
+    fetchDashboardAnalytics();
+
+}, []);
     if (!analytics) {
         return (
             <DashboardLayout>
@@ -114,14 +86,14 @@ const generateAIInsights = async () => {
                         </button>
                     </div>
                 </div>
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
 
 <div className="bg-white p-6 rounded-2xl shadow">
 <h2 className="text-gray-500">
 Total Documents
 </h2>
 
-<h1 className="text-5xl font-bold mt-4">
+<h1 className="text-4xl font-bold mt-4">
 {
 analytics.documents.total_documents
 }
@@ -134,7 +106,7 @@ analytics.documents.total_documents
 Revenue Generated
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-green-600">
+<h1 className="text-4xl font-bold mt-4 text-green-600">
 $
 {
 analytics.payments.total_revenue.toFixed(2)
@@ -148,7 +120,7 @@ analytics.payments.total_revenue.toFixed(2)
 Pending Amount
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-red-600">
+<h1 className="text-4xl font-bold mt-4 text-red-600">
 $
 {
 analytics.payments.pending_amount.toFixed(2)
@@ -162,7 +134,7 @@ analytics.payments.pending_amount.toFixed(2)
 Active Shipments
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-blue-600">
+<h1 className="text-4xl font-bold mt-4 text-blue-600">
 {
 analytics.shipments.total_shipments
 }
@@ -175,7 +147,7 @@ analytics.shipments.total_shipments
 Delayed Shipments
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-red-600">
+<h1 className="text-4xl font-bold mt-4 text-red-600">
 {
 analytics.shipments.delayed_shipments
 }
@@ -188,7 +160,7 @@ analytics.shipments.delayed_shipments
 Customs Holds
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-yellow-600">
+<h1 className="text-4xl font-bold mt-4 text-yellow-600">
 {
 analytics.shipments.customs_holds
 }
@@ -201,7 +173,7 @@ analytics.shipments.customs_holds
 Countries Trading
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-blue-600">
+<h1 className="text-4xl font-bold mt-4 text-blue-600">
 {
 analytics.shipments.countries_trading
 }
@@ -214,7 +186,7 @@ analytics.shipments.countries_trading
 Active Ports
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-purple-600">
+<h1 className="text-4xl font-bold mt-4 text-purple-600">
 {
 analytics.shipments.active_ports
 }
@@ -227,7 +199,7 @@ analytics.shipments.active_ports
 Compliance Rate
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-green-600">
+<h1 className="text-4xl font-bold mt-4 text-green-600">
 {
 analytics.risk.compliance_rate
 }%
@@ -240,7 +212,7 @@ analytics.risk.compliance_rate
 Avg Delivery
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-orange-600">
+<h1 className="text-4xl font-bold mt-4 text-orange-600">
 {
 analytics.shipments.average_delivery
 }
@@ -254,7 +226,7 @@ analytics.shipments.average_delivery
 Risk Escalations
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-red-700">
+<h1 className="text-4xl font-bold mt-4 text-red-700">
 {
 analytics.risk.risk_escalations
 }
@@ -267,7 +239,7 @@ analytics.risk.risk_escalations
 High Risk Clients
 </h2>
 
-<h1 className="text-5xl font-bold mt-4 text-red-600">
+<h1 className="text-4xl font-bold mt-4 text-red-600">
 {
 analytics.risk.risk_escalations
 }
@@ -475,62 +447,6 @@ analytics.risk.risk_escalations
         </div>
     </div>
 
-</div>
-        <div className="bg-white rounded-2xl shadow p-6 mb-10">
-    <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold">
-            AI Insights
-        </h2>
-        <button
-            onClick={generateAIInsights}
-            className="bg-black text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800">
-            {
-                loadingInsights
-                ? "Generating..."
-                : "Generate AI Insights"
-            }
-        </button>
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {
-            insights.map((item) => (
-<motion.div
-    key={item.id}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}  
-    transition={{ duration: 0.4 }}
-    whileHover={{ scale: 1.02 }}
-    className={`
-        rounded-3xl p-7 shadow-lg border-l-[10px]
-        transition-all duration-300
-        ${
-            item.insight_type === "payment"
-            ? "bg-gradient-to-br from-red-50 to-red-100 border-red-500"
-            : item.insight_type === "revenue"
-            ? "bg-gradient-to-br from-green-50 to-green-100 border-green-500"
-            : item.insight_type === "tax"
-            ? "bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-500"
-            : "bg-gradient-to-br from-blue-50 to-blue-100 border-blue-500"}`}>
-    <div className="flex justify-between items-center mb-5">
-        <h2 className="text-2xl font-bold text-gray-800">
-            {item.title}
-        </h2>
-    </div>
-    <div className="whitespace-pre-line text-gray-700 leading-5 text-[15px]">
-        {item.content}
-    </div>
-    <div className="mt-6 text-sm text-gray-500">
-        Generated:
-        {" "}
-        {
-            new Date(
-                item.created_at
-            ).toLocaleString()
-        }
-    </div>
-</motion.div>
-            ))}
-    </div>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
 

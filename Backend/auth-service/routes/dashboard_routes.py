@@ -289,3 +289,4 @@ def dashboard_analytics():
     finally:
 
         db.close()
+

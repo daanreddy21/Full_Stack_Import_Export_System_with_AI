@@ -6,7 +6,79 @@ from models.document_model import Document
 from models.payment_model import Payment
 from datetime import (datetime, date)
 from models.notification_model import Notification
+from apscheduler.schedulers.background import BackgroundScheduler
 router = APIRouter()
+def check_overdue_payments():
+
+    db: Session = SessionLocal()
+
+    try:
+
+        today = date.today()
+
+        payments = db.query(
+            Payment
+        ).filter(
+            Payment.payment_status == "Pending"
+        ).all()
+
+        for payment in payments:
+
+            if payment.due_date:
+
+                overdue_days = (
+                    today - payment.due_date
+                ).days
+
+                if overdue_days > 3:
+
+                    existing_notification = db.query(
+                        Notification
+                    ).filter(
+                        Notification.invoice_number
+                        == payment.invoice_number,
+
+                        Notification.message.contains(
+                            str(today)
+                        )
+                    ).first()
+
+                    if not existing_notification:
+
+                        notification = Notification(
+
+                            type="payment_risk",
+
+                            title="Payment Collection Risk",
+
+                            message=f"{today} : Payment overdue by {overdue_days} days. Inform finance department regarding overdue invoice payment.",
+
+                            invoice_number=payment.invoice_number,
+
+                            buyer_name=payment.buyer_name,
+
+                            department="Finance"
+
+                        )
+
+                        db.add(notification)
+
+        db.commit()
+
+    finally:
+
+        db.close()
+scheduler = BackgroundScheduler()
+
+if not scheduler.running:
+
+    scheduler.add_job(
+        check_overdue_payments,
+        "interval",
+        days=1
+    )
+
+    scheduler.start()
 @router.get("/api/payments")
 def get_payments():
     db: Session = SessionLocal()
@@ -29,17 +101,6 @@ def get_payments():
             ).days
             if overdue_days > 0:
                 overdue = True
-                if overdue_days > 3:
-                    notification = Notification(
-                        type="payment_risk",
-                        title="Payment Collection Risk",
-                        message=f"Payment overdue by {overdue_days} days. Inform finance department regarding overdue invoice payment.",
-                        invoice_number=payment.invoice_number,
-                        buyer_name=payment.buyer_name,
-                        department="Finance"
-                    )
-
-                    db.add(notification)
         result.append({
             "id": payment.id,
             "invoice_number": payment.invoice_number,

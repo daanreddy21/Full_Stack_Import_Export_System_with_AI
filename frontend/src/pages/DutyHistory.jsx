@@ -12,6 +12,10 @@ import ShipmentForm from "../components/ShipmentForm";
 export default function DutyHistory() {
     const billRef = useRef();
     const [history, setHistory] = useState([]);
+    const ITEMS_PER_PAGE = 10;
+
+const [currentPage, setCurrentPage] =
+    useState(1);
     const [filteredHistory, setFilteredHistory]= useState([]);
     const [search, setSearch] = useState("");
     const [countryFilter, setCountryFilter]= useState("");
@@ -176,6 +180,20 @@ const handleView = (record) => {
     setSelectedRecord(record);
     setShowModal(true);
 };
+const startIndex =
+    (currentPage - 1) *
+    ITEMS_PER_PAGE;
+
+const paginatedHistory =
+    history.slice(
+        startIndex,
+        startIndex + ITEMS_PER_PAGE
+    );
+
+const totalPages = Math.ceil(
+    history.length /
+    ITEMS_PER_PAGE
+);
     return (
         <DashboardLayout>
             <div className="p-6 bg-gray-100 min-h-screen">
@@ -512,6 +530,35 @@ Create Payment
                         </table>
                     </div>
                     </div>
+                    <div className="flex justify-center items-center gap-4 mt-6">
+
+<button
+onClick={() =>
+setCurrentPage((prev) =>
+Math.max(prev - 1, 1)
+)
+}
+className="bg-gray-200 px-4 py-2 rounded-lg"
+>
+Previous
+</button>
+
+<p className="font-bold">
+Page {currentPage} of {totalPages}
+</p>
+
+<button
+onClick={() =>
+setCurrentPage((prev) =>
+Math.min(prev + 1, totalPages)
+)
+}
+className="bg-gray-200 px-4 py-2 rounded-lg"
+>
+Next
+</button>
+
+</div>
                 </div>
                 <div className="mt-10">
                     <PaymentsTable

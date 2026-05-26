@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi import WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from database.db import Base, engine
 from routes.auth_routes import router as auth_router
@@ -21,9 +22,15 @@ from models.required_documents_model import *
 from models.restricted_products_model import *
 from models.trade_agreements_model import *
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.gzip import GZipMiddleware
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
-app.add_middleware(CORSMiddleware,allow_origins=["*"],allow_credentials=True,allow_methods=["*"],allow_headers=["*"],)
+app.add_middleware(CORSMiddleware,
+                   allow_origins=["*"],allow_credentials=True,allow_methods=["*"],allow_headers=["*"],)
+app.add_middleware(
+    GZipMiddleware,
+    minimum_size=1000
+)
 app.include_router(auth_router)
 app.include_router(document_router)
 app.include_router(duty_router)
@@ -42,4 +49,24 @@ def home():
     return {
         "message": "Auth Service Running"
     }
+active_connections = []
 
+@app.websocket("/ws")
+
+async def websocket_endpoint(
+    websocket: WebSocket
+):
+
+    await websocket.accept()
+
+    active_connections.append(websocket)
+
+    try:
+
+        while True:
+
+            await websocket.receive_text()
+
+    except:
+
+        active_connections.remove(websocket)

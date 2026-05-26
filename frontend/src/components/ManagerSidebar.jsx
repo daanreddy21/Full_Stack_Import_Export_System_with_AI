@@ -1,4 +1,4 @@
-import { FaHome, FaFileAlt, FaBox, FaMoneyBill, FaExclamationTriangle, FaShip, FaBell,FaGlobe,FaClipboardCheck, FaExclamationCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaFileAlt, FaBox, FaMoneyBill, FaExclamationTriangle, FaShip, FaBell,FaGlobe,FaClipboardCheck, FaExclamationCircle,FaBrain, FaSignOutAlt } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 export default function ManagerSidebar(){
 const navigate = useNavigate();
@@ -25,6 +25,15 @@ const navigate = useNavigate();
       className={({ isActive }) =>`${menuClass} ${isActive ? activeClass : ""}`}>
         <FaHome />Dashboard
     </NavLink>
+    <NavLink
+    to="/ai-insights"
+    className={({ isActive }) =>
+        `${menuClass} ${isActive ? activeClass : ""}`
+    }
+>
+    <FaBrain />
+    AI Insights
+</NavLink>
 <NavLink
     to="/shipment-approvals"
     className={({ isActive }) =>
