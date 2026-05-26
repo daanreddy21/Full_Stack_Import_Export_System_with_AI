@@ -1,5 +1,8 @@
+from apscheduler.schedulers.background import BackgroundScheduler
+from routes.payment_routes import (
+    check_overdue_payments
+)
 from fastapi import FastAPI
-from fastapi import WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from database.db import Base, engine
 from routes.auth_routes import router as auth_router
@@ -25,6 +28,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.gzip import GZipMiddleware
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    check_overdue_payments,
+    "interval",
+    days=1
+)
+scheduler.start()
 app.add_middleware(CORSMiddleware,
                    allow_origins=["*"],allow_credentials=True,allow_methods=["*"],allow_headers=["*"],)
 app.add_middleware(
@@ -50,23 +60,3 @@ def home():
         "message": "Auth Service Running"
     }
 active_connections = []
-
-@app.websocket("/ws")
-
-async def websocket_endpoint(
-    websocket: WebSocket
-):
-
-    await websocket.accept()
-
-    active_connections.append(websocket)
-
-    try:
-
-        while True:
-
-            await websocket.receive_text()
-
-    except:
-
-        active_connections.remove(websocket)

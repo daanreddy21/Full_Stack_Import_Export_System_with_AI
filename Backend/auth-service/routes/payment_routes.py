@@ -68,17 +68,6 @@ def check_overdue_payments():
     finally:
 
         db.close()
-scheduler = BackgroundScheduler()
-
-if not scheduler.running:
-
-    scheduler.add_job(
-        check_overdue_payments,
-        "interval",
-        days=1
-    )
-
-    scheduler.start()
 @router.get("/api/payments")
 def get_payments():
     db: Session = SessionLocal()
