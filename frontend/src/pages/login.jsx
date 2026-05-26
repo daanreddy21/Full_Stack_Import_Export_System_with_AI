@@ -157,10 +157,10 @@ export default function Login() {
       <div className="hidden md:flex items-center justify-center bg-black">
 
         <img
-          src="https://images.unsplash.com/photo-1578575437130-527eed3abbec"
+          src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1200&q=70&fm=webp"
           alt="Import Export"
           className="w-full h-full object-cover"
-          loading="lazy"
+          fetchPriority="high"
         />
 
       </div>
