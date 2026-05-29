@@ -4,6 +4,7 @@ from database.db import Base
 class Payment(Base):
     __tablename__ = "payments"
     id = Column( Integer, primary_key=True )
+    payment_reference = Column(String, unique=True)
     invoice_number = Column( String )
     buyer_name = Column( String )
     hsn_code = Column( String )

@@ -91,6 +91,7 @@ const getCurrencySymbol = (currency) => {
                 <thead className="bg-gray-100">
                     <tr>
                         <th className="p-4"> Invoice Number</th>
+                        <th className="p-4"> Payment ID</th>
                         <th className="p-4"> Buyer Name</th>
                         <th className="p-4"> HSN Code</th>
                         <th className="p-4"> Product</th>
@@ -110,6 +111,7 @@ const getCurrencySymbol = (currency) => {
                     {
                     payments.map((item) => (
                         <tr key={item.id} className="border-b border-gray-200">
+                            <td className="p-4"> {item.payment_reference}</td>
                             <td className="p-4"> {item.invoice_number}</td>
                             <td className="p-4">{item.buyer_name}</td>
                             <td className="p-4">{item.hsn_code}</td>

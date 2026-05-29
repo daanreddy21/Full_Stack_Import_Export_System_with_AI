@@ -137,3 +137,59 @@ def get_country_analytics():
         }
     finally:
         db.close()
+@router.get("/api/country-details/{country}")
+def get_country_details(country: str):
+    db: Session = SessionLocal()
+
+    try:
+        shipments = db.query(
+            Shipment
+        ).filter(
+            Shipment.destination_country == country
+        ).all()
+
+        payments = db.query(
+            Payment
+        ).filter(
+            Payment.destination_country == country
+        ).all()
+
+        risks = db.query(
+            RiskAnalysis
+        ).filter(
+            RiskAnalysis.country == country
+        ).all()
+
+        return {
+            "country": country,
+            "shipments": [
+                {
+                    "id": s.id,
+                    "tracking_id": s.tracking_id,
+                    "buyer_name": s.buyer_name,
+                    "shipment_status": s.shipment_status,
+                    "is_delayed": s.is_delayed,
+                    "invoice_number": s.invoice_number
+                }
+                for s in shipments
+            ],
+            "payments": [
+                {
+                    "invoice_number": p.invoice_number,
+                    "buyer_name": p.buyer_name,
+                    "status": p.payment_status,
+                    "amount": p.final_total_usd
+                }
+                for p in payments
+            ],
+            "risks": [
+                {
+                    "buyer_name": r.buyer_name,
+                    "risk_level": r.risk_level
+                }
+                for r in risks
+            ]
+        }
+
+    finally:
+        db.close()

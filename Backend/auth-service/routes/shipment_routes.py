@@ -1,3 +1,6 @@
+from models.payment_model import Payment
+from models.document_model import Document
+from models.risk_model import RiskAnalysis
 from fastapi import APIRouter
 from sqlalchemy.orm import Session
 from database.db import SessionLocal
@@ -53,6 +56,63 @@ def create_shipment(data: dict):
         }
     finally:
         db.close()
+def check_delayed_shipments():
+
+    db: Session = SessionLocal()
+
+    try:
+
+        today = date.today()
+
+        existing_notification = db.query(
+            Notification
+        ).filter(
+            Notification.type == "shipment_delay",
+            Notification.notification_date == today
+        ).first()
+
+        if existing_notification:
+            return
+
+        delayed_count = 0
+
+        shipments = db.query(
+            Shipment
+        ).filter(
+            Shipment.shipment_status != "Delivered"
+        ).all()
+
+        for shipment in shipments:
+
+            if shipment.estimated_delivery:
+
+                delay = (
+                    today -
+                    shipment.estimated_delivery
+                ).days
+
+                if delay > 3:
+                    delayed_count += 1
+
+        if delayed_count > 0:
+
+            notification = Notification(
+                type="shipment_delay",
+                title="Shipment Delay Risk",
+                message=f"Shipment delayed by {delay} days. Inform customs duty department to resolve shipment clearance issue.",
+                invoice_number=shipment.invoice_number,
+                buyer_name=shipment.buyer_name,
+                tracking_id=shipment.tracking_id,
+                department="Customs",
+                notification_date=today
+            )
+            db.add(notification)
+
+        db.commit()
+
+    finally:
+
+        db.close()
 @router.get("/api/shipments")
 def get_shipments():
     db: Session = SessionLocal()
@@ -74,25 +134,6 @@ def get_shipments():
                 if delay > 3:
                     shipment.is_delayed = True
                     shipment.delay_days = delay
-                    existing_notification = db.query(
-                        Notification
-                    ).filter(
-                        Notification.tracking_id == shipment.tracking_id,
-                        Notification.type == "shipment_delay"
-                    ).first()
-                    if not existing_notification:
-                        notification = Notification(
-                            type="shipment_delay",
-                            title="Shipment Delay Risk",
-                            message=
-                            "Inform customs duty department to resolve shipment clearance issue.",
-                            invoice_number=shipment.invoice_number,
-                            buyer_name=shipment.buyer_name,
-                            tracking_id=shipment.tracking_id,
-                            department="Customs"
-                        )
-                        db.add(notification)
-                        db.commit()
                 else:
                     shipment.is_delayed = False
                     shipment.delay_days = 0
@@ -220,5 +261,51 @@ def hold_shipment(shipment_id: int, data: dict):
         shipment.hold_reason = data.get("reason")
         db.commit()
         return {"message": "Shipment Put On Hold"}
+    finally:
+        db.close()
+@router.get("/api/shipment-details/{tracking_id}")
+def get_shipment_details(tracking_id: str):
+
+    db: Session = SessionLocal()
+
+    try:
+
+        shipment = db.query(
+            Shipment
+        ).filter(
+            Shipment.tracking_id == tracking_id
+        ).first()
+        if not shipment:
+            return {
+                "message":
+                "Shipment Not Found"
+            }
+        payment = db.query(
+            Payment
+        ).filter(
+            Payment.invoice_number
+            ==
+            shipment.invoice_number
+        ).first()
+        document = db.query(
+            Document
+        ).filter(
+            Document.invoice_number
+            ==
+            shipment.invoice_number
+        ).first()
+        risk = db.query(
+            RiskAnalysis
+        ).filter(
+            RiskAnalysis.buyer_name
+            ==
+            shipment.buyer_name
+        ).first()
+        return {
+            "shipment": shipment,
+            "payment": payment,
+            "document": document,
+            "risk": risk
+        }
     finally:
         db.close()

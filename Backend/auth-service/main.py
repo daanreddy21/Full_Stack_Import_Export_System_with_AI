@@ -26,15 +26,13 @@ from models.restricted_products_model import *
 from models.trade_agreements_model import *
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.gzip import GZipMiddleware
-Base.metadata.create_all(bind=engine)
+from utils.notification_scheduler import start_notification_scheduler
 app = FastAPI()
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    check_overdue_payments,
-    "interval",
-    days=1
-)
-scheduler.start()
+@app.on_event("startup")
+def startup_event():
+    start_notification_scheduler()
+Base.metadata.create_all(bind=engine)
+
 app.add_middleware(CORSMiddleware,
                    allow_origins=["*"],allow_credentials=True,allow_methods=["*"],allow_headers=["*"],)
 app.add_middleware(
@@ -49,7 +47,6 @@ app.include_router(payment_router)
 app.include_router(risk_router)
 app.include_router(shipment_router)
 app.include_router(dashboard_router)
-app.include_router(shipment_router)
 app.include_router(insight_router)
 app.include_router(country_analytics_router)
 app.include_router(notification_router)

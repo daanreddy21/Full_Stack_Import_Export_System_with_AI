@@ -6,7 +6,6 @@ from models.document_model import Document
 from models.payment_model import Payment
 from datetime import (datetime, date)
 from models.notification_model import Notification
-from apscheduler.schedulers.background import BackgroundScheduler
 router = APIRouter()
 def check_overdue_payments():
 
@@ -35,12 +34,13 @@ def check_overdue_payments():
                     existing_notification = db.query(
                         Notification
                     ).filter(
-                        Notification.invoice_number
-                        == payment.invoice_number,
+                        Notification.type == "payment_risk",
 
-                        Notification.message.contains(
-                            str(today)
-                        )
+                        Notification.tracking_id
+                        == payment.payment_reference,
+
+                        Notification.notification_date
+                        == today
                     ).first()
 
                     if not existing_notification:
@@ -51,13 +51,17 @@ def check_overdue_payments():
 
                             title="Payment Collection Risk",
 
-                            message=f"{today} : Payment overdue by {overdue_days} days. Inform finance department regarding overdue invoice payment.",
+                            message=f"Payment overdue by {overdue_days} days. Inform finance department regarding overdue invoice payment.",
 
                             invoice_number=payment.invoice_number,
 
+                            tracking_id=payment.payment_reference,
+
                             buyer_name=payment.buyer_name,
 
-                            department="Finance"
+                            department="Finance",
+
+                            notification_date=today
 
                         )
 
@@ -93,6 +97,7 @@ def get_payments():
         result.append({
             "id": payment.id,
             "invoice_number": payment.invoice_number,
+            "payment_reference": payment.payment_reference,
             "buyer_name": payment.buyer_name,
             "hsn_code": payment.hsn_code,
             "product": payment.product,
@@ -121,9 +126,17 @@ def create_payment(data: dict):
     ).first()
     invoice_number = ""
     buyer_name = ""
+    sequence = 1
     if document:
         invoice_number = document.invoice_number
         buyer_name = document.buyer_name
+        existing_count = db.query(
+            Payment
+        ).filter(
+            Payment.invoice_number == invoice_number
+        ).count()
+
+        sequence = existing_count + 1
     payment = Payment(
         invoice_number=invoice_number,
         buyer_name=buyer_name,
@@ -140,8 +153,18 @@ def create_payment(data: dict):
     )
     db.add(payment)
     db.commit()
+    db.refresh(payment)
+
+    payment.payment_reference = (
+        f"{invoice_number}-P{sequence:03d}"
+    )
+
+    db.commit()
+
     return {
-        "message": "Payment Created"
+        "message": "Payment Created",
+        "payment_reference":
+        payment.payment_reference
     }
 @router.put("/api/payments/pay/{payment_id}")
 def mark_payment_paid( payment_id: int ):
